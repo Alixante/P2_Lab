@@ -7,7 +7,7 @@ Board::Board(int width, int height)
 	m_tauler.resize(width, std::vector<Candy>(height, 0));
 	m_tauler.resize(width, std::vector<Candy>(height, 0));
 	// Implement your code here
-	for (int i = 0; i < width; i++)
+	for (int i = 0; i < width; i++) //SECSO
 	{
 		for (int j = 0; j < height; j++)
 		{
