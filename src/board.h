@@ -86,10 +86,18 @@ public:
 
     /// Get the board height
     int getHeight() const;
-
+    
 private:
-    std::vector<std::vector<Candy>> m_tauler;
+    //Punter a candy per poderr posar nullptr quan no hi hagi cap :)
+    std::vector<std::vector<Candy*>> m_tauler;
+    int m_height;
+    int m_width;
     /// Students can add as many protected methods and attributes as needed.
+
+    bool insideBoard(int x, int y);
+    std::vector<coords> Board::returnExplosions();
+    void dropCandies();
+
 };
 
 #endif
