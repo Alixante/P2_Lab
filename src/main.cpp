@@ -5,6 +5,7 @@
 
 int main(int argc, const char* argv[])
 {
+    
     if (!test())
     {
         std::cout << "Tests NO superados. Los has definido ya?" << std::endl;
@@ -18,5 +19,9 @@ int main(int argc, const char* argv[])
     Game game;
     // Run until ESC is pressed
     game.run();
+    
+
+    //Loading and dumping tests
+
     return 0;
 }

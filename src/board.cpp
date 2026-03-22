@@ -4,60 +4,69 @@
 
 Board::Board(int width, int height)
 {
-    // Implement your code here
+	m_tauler.resize(width, std::vector<Candy>(height, 0));
+	m_tauler.resize(width, std::vector<Candy>(height, 0));
+	// Implement your code here
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			
+		}
+	}
 }
 
 Board::~Board()
 {
-    // Implement your code here
+	// Implement your code here
 }
 
 
 Candy* Board::getCell(int x, int y) const
 {
-    // Implement your code here
-    return nullptr;
+	// Implement your code here
+	return nullptr;
 }
 
 void Board::setCell(Candy* candy, int x, int y)
 {
-    // Implement your code here
+	// Implement your code here
 }
 
 
 int Board::getWidth() const
 {
-    // Implement your code here
-    return -1;
+	// Implement your code here
+	return -1;
 }
 
 
 int Board::getHeight() const
 {
-    // Implement your code here
-    return -1;
+	// Implement your code here
+	return -1;
 }
 
 bool Board::shouldExplode(int x, int y) const
 {
-    // Implement your code here
-    return false;
+	// Implement your code here
+	return false;
 }
 
 std::vector<Candy*> Board::explodeAndDrop()
 {
-    // Implement your code here
-    return {};
+	// Implement your code here
+	return {};
 }
 
 bool Board::dump(const std::string& output_path) const
 {
-    // Implement your code here
-    return false;
+	// Implement your code here
+	return false;
 }
 
 bool Board::load(const std::string& input_path)
 {
-    // Implement your code here
-    return false;
+	// Implement your code here
+	return false;
 }
