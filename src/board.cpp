@@ -68,59 +68,111 @@ int Board::getHeight() const //Hecho
 bool Board::shouldExplode(int x, int y) const
 {
 
-	Candy self = m_tauler[x][y];
-	int contador1 = 0, contador2 = 0;
-	int var = 2;
+	Candy* self = m_tauler[x][y];
+	int contador = 0;
+	int const var = 2;
 
+	if (x < 0 || x >= m_width || y < 0 || y >= m_height)
+	{
+		return false;
+	}
 
 
 	for (int i = 0; i < 5; i++) //Horizontal
 	{
-		if (self.getType() == m_tauler[x - var + i][y].getType() && x - var >= 0 && x + var <= m_width)
+		int chequea = x - var + i;
+
+		if (self->getType() == m_tauler[chequea][y]->getType() && chequea >= 0 && chequea <= m_width)
 		{
-			contador1++;			
+			contador++;
 		}
 		else
 		{
-			contador1 = 0;
+			contador = 0;
 		}
 	}
-	
-	if (contador1 == 3)
+
+	if (contador == 3)
 	{
 		return true;
 	}
 	else
 	{
-		contador1 = 0;
+		contador = 0;
 	}
-	
-	for (int j = 0; i < 5; i++) //Horizontal
+
+
+	for (int j = 0; j < 5; j++) //Vertical
 	{
-		if (self.getType() == m_tauler[x][y - var + j].getType() && y - var >= 0 && y + var <= m_width)
+		int chequea = y - var + j;
+
+		if (self->getType() == m_tauler[x][chequea]->getType() && chequea >= 0 && chequea <= m_height)
 		{
-			contador1++;			
+			contador++;
 		}
 		else
 		{
-			contador1 = 0;
+			contador = 0;
 		}
 	}
-	
-	if (contador1 == 3)
+
+	if (contador == 3)
 	{
 		return true;
 	}
 	else
 	{
-		contador1 = 0;
+		contador = 0;
 	}
 
-	
 
-	//si posicion x tiene candy rojo, si x+1 tiene tmb candy rojo contador++
+	for (int k = 0; k < 5; k++) //Diagonal 1 "\"
+	{
+		int chequeaX = x - var + k;
+		int chequeaY = y + var - k;
 
+		if (self->getType() == m_tauler[chequeaX][chequeaY]->getType() && chequeaX >= 0 && chequeaY >=0 && chequeaX <= m_width && chequeaY <= m_height)
+		{
+			contador++;
+		}
+		else
+		{
+			contador = 0;
+		}
+	}
 
+	if (contador == 3)
+	{
+		return true;
+	}
+	else
+	{
+		contador = 0;
+	}
+
+	for (int l = 0; l < 5; l++) //Diagonal 2 "/"
+	{
+		int chequeaX = x + var - l;
+		int chequeaY = y + var - l;
+
+		if (self->getType() == m_tauler[chequeaX][chequeaY]->getType() && chequeaX >= 0 && chequeaY >= 0 && chequeaX <= m_width && chequeaY <= m_height)
+		{
+			contador++;
+		}
+		else
+		{
+			contador = 0;
+		}
+	}
+
+	if (contador == 3)
+	{
+		return true;
+	}
+	else
+	{
+		contador = 0;
+	}
 	return false;
 }
 
