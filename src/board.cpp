@@ -129,7 +129,7 @@ Board::~Board() {
 	for (int x = 0; x < m_width; x++) {
 		for (int y = 0; y < m_height; y++) {
 			if (m_tauler[x][y] != nullptr) {
-				delete m_tauler[x][y];
+				//delete m_tauler[x][y];
 				m_tauler[x][y] = nullptr;
 			}
 		}
@@ -139,6 +139,7 @@ Board::~Board() {
 
 Candy* Board::getCell(int x, int y) const
 {
+	if (!insideBoard(x, y)) return nullptr;
 	Candy* cela = m_tauler[x][y];
 	if (cela != nullptr)
 	{
@@ -158,14 +159,13 @@ void Board::setCell(Candy* candy, int x, int y)
 
 }
 
-
-int Board::getWidth() const //Hecho
+int Board::getWidth() const
 {
 	return m_width;
 }
 
 
-int Board::getHeight() const //Hecho
+int Board::getHeight() const
 {
 	return m_height;
 }
@@ -187,11 +187,12 @@ bool Board::shouldExplode(int x, int y) const
 		return false;
 	}
 
-	for (int i = 0; i < 5; i++) //Horizontal
+	// Horizontal
+	for (int i = 0; i < 5; i++)
 	{
 		int chequea = x - var + i;
 
-		if (self->getType() == m_tauler[chequea][y]->getType() && m_tauler[chequea][y] != nullptr && chequea >= 0 && chequea < m_width)
+		if (chequea >= 0 && chequea < m_width && m_tauler[chequea][y] != nullptr && self->getType() == m_tauler[chequea][y]->getType())
 		{
 			contador++;
 		}
@@ -199,23 +200,20 @@ bool Board::shouldExplode(int x, int y) const
 		{
 			contador = 0;
 		}
+		if (contador == 3)
+		{
+			return true;
+		}
 	}
 
-	if (contador == 3)
-	{
-		return true;
-	}
-	else
-	{
-		contador = 0;
-	}
+	contador = 0;
 
-
-	for (int j = 0; j < 5; j++) //Vertical
+	// Vertical
+	for (int j = 0; j < 5; j++)
 	{
 		int chequea = y - var + j;
 
-		if (self->getType() == m_tauler[x][chequea]->getType() && m_tauler[x][chequea] != nullptr && chequea >= 0 && chequea < m_height)
+		if (chequea >= 0 && chequea < m_height && m_tauler[x][chequea] != nullptr && self->getType() == m_tauler[x][chequea]->getType())
 		{
 			contador++;
 		}
@@ -223,24 +221,21 @@ bool Board::shouldExplode(int x, int y) const
 		{
 			contador = 0;
 		}
+		if (contador == 3)
+		{
+			return true;
+		}
 	}
 
-	if (contador == 3)
-	{
-		return true;
-	}
-	else
-	{
-		contador = 0;
-	}
+	contador = 0;
 
-
-	for (int k = 0; k < 5; k++) //Diagonal 1
+	// Diagonal 1
+	for (int k = 0; k < 5; k++)
 	{
 		int chequeaX = x - var + k;
-		int chequeaY = y + var - k;
+		int chequeaY = y - var + k;
 
-		if (self->getType() == m_tauler[chequeaX][chequeaY]->getType() && m_tauler[chequeaX][chequeaY] != nullptr && chequeaX >= 0 && chequeaY >= 0 && chequeaX < m_width && chequeaY < m_height)
+		if (chequeaX >= 0 && chequeaY >= 0 && chequeaX < m_width && chequeaY < m_height && m_tauler[chequeaX][chequeaY] != nullptr && self->getType() == m_tauler[chequeaX][chequeaY]->getType())
 		{
 			contador++;
 		}
@@ -248,23 +243,21 @@ bool Board::shouldExplode(int x, int y) const
 		{
 			contador = 0;
 		}
+		if (contador == 3)
+		{
+			return true;
+		}
 	}
 
-	if (contador == 3)
-	{
-		return true;
-	}
-	else
-	{
-		contador = 0;
-	}
+	contador = 0;
 
-	for (int l = 0; l < 5; l++) //Diagonal 2
+	// Diagonal 2
+	for (int l = 0; l < 5; l++)
 	{
-		int chequeaX = x + var - l;
+		int chequeaX = x - var + l;
 		int chequeaY = y + var - l;
 
-		if (self->getType() == m_tauler[chequeaX][chequeaY]->getType() && m_tauler[chequeaX][chequeaY] != nullptr && chequeaX >= 0 && chequeaY >= 0 && chequeaX < m_width && chequeaY < m_height)
+		if (chequeaX >= 0 && chequeaY >= 0 && chequeaX < m_width && chequeaY < m_height && m_tauler[chequeaX][chequeaY] != nullptr && self->getType() == m_tauler[chequeaX][chequeaY]->getType())
 		{
 			contador++;
 		}
@@ -272,43 +265,20 @@ bool Board::shouldExplode(int x, int y) const
 		{
 			contador = 0;
 		}
+		if (contador == 3)
+		{
+			return true;
+		}
 	}
 
-	if (contador == 3)
-	{
-		return true;
-	}
-	else
-	{
-		contador = 0;
-	}
 	return false;
 }
 
 std::vector<Candy*> Board::explodeAndDrop()
 {
-	/*bool noExplosion = true;
-	std::vector<Candy> explodedCandies;
-	while (!noExplosion)
-	{
-		for (int x = 0; x < m_width; x++)
-		{
-			for (int y = 0; y < m_heigh; y++)
-			{
-				if (shouldExplode(x, y))
-				{
-					explodedCandies.push_back(m_tauler[x][y]);
-					m_tauler[x][y] = nullptr;
-					noExplode = false;
-
-				}
-			}
-		}
-	}
-	*/
 	bool exploded = true;
 	std::vector<Candy*> explodedCandies;
-	do
+	while (exploded)
 	{
 		// Es verifica quins han dexplotar i es torna les coordenades en el tauler
 		std::vector<coords> explosions = returnExplosions();
@@ -318,7 +288,7 @@ std::vector<Candy*> Board::explodeAndDrop()
 			return explodedCandies;
 		}
 
-		//Eliminar excplotats
+		//Eliminar explodats
 		for (unsigned int i = 0; i < explosions.size(); i++)
 		{
 			coords coord = explosions[i];
@@ -327,10 +297,7 @@ std::vector<Candy*> Board::explodeAndDrop()
 		}
 
 		dropCandies();
-
-
-
-	} while (exploded);
+	}
 
 	return explodedCandies;
 }
@@ -395,35 +362,33 @@ bool Board::load(const std::string& input_path)
 		return false;
 	}
 
-	for (int i = 0; i < m_width; i++)
+	int newWidth, newHeight;
+	arxiu >> newWidth >> newHeight;
+	
+	if (newWidth <= 0 || newHeight <= 0)
 	{
-		for (int j = 0; j < m_height; j++)
-		{
-			m_tauler[i][j] = nullptr;
-
-		}
+		return false;
 	}
 
-	arxiu >> m_width >> m_height;
-	//std::cout << m_width << " " << m_height << std::endl;
+	m_width = newWidth;
+	m_height = newHeight;
 	m_tauler.assign(m_width, std::vector<Candy*>(m_height, nullptr));
+	
 	for (int x = 0; x < m_width; x++)
 	{
 		for (int y = 0; y < m_height; y++)
 		{
 			char candyChar;
-			arxiu >> candyChar;
-			CandyType result;
+			if (!(arxiu >> candyChar))
+			{
+				return false;
+			}
 			if (candyChar != 'N')
 			{
 				CandyType candyType = charToCandYType(candyChar);
 				m_tauler[x][y] = new Candy(candyType);
-
 			}
-			//std::cout << candyChar;
-
 		}
-		//std::cout << std::endl;
 	}
 	return true;
 }
@@ -461,5 +426,68 @@ bool Board::insideBoard(int x, int y) const
 	}
 	return false;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
