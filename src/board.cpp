@@ -35,48 +35,6 @@ char candyTypeToChar(CandyType c)
 	return result;
 }
 
-bool checkFile(std::ifstream& fitxer, std::string nomFitxer)
-{
-	if (!fitxer.is_open())
-	{
-		std::cout << "No sha pogut obrir el fitxer: " << nomFitxer << std::endl;
-		return 0;
-	}
-	//He bscat com fer-ho i sembla ser que es el millor, primer mira el primer caracter del arxiu i si es el EOF, ho diu
-	else if (fitxer.peek() == EOF)
-	{
-		std::cout << "El fitxer esta buit: " << nomFitxer << std::endl;
-		return 0;
-	}
-
-	else if (!fitxer.good())
-	{
-		std::cout << "Fitxer not good" << std::endl;
-		return 0;
-	}
-	return 1;
-}
-bool checkFile(std::ofstream& fitxer, std::string nomFitxer)
-{
-	if (!fitxer.is_open())
-	{
-		std::cout << "No sha pogut obrir el fitxer: " << nomFitxer << std::endl;
-		return 0;
-	}
-	else if (fitxer.eof())
-	{
-		std::cout << "El fitxer esta buit: " << nomFitxer << std::endl;
-		return 0;
-	}
-	else if (!fitxer.good())
-	{
-		std::cout << "Fitxer not good" << std::endl;
-		return 0;
-	}
-	return 1;
-
-}
-
 CandyType charToCandYType(char c)
 {
 	CandyType result;
@@ -106,6 +64,45 @@ CandyType charToCandYType(char c)
 	}
 	return result;
 }
+
+bool checkFile(std::ifstream& fitxer, std::string nomFitxer)
+{
+	if (!fitxer.is_open())
+	{
+		std::cout << "No sha pogut obrir el fitxer: " << nomFitxer << std::endl;
+		return 0;
+	}
+	//He bscat com fer-ho i sembla ser que es el millor, primer mira el primer caracter del arxiu i si es el EOF, ho diu
+	else if (fitxer.peek() == EOF)
+	{
+		std::cout << "El fitxer esta buit: " << nomFitxer << std::endl;
+		return 0;
+	}
+
+	else if (!fitxer.good())
+	{
+		std::cout << "Fitxer not good" << std::endl;
+		return 0;
+	}
+	return 1;
+}
+bool checkFile(std::ofstream& fitxer, std::string nomFitxer)
+{
+	if (!fitxer.is_open())
+	{
+		std::cout << "No sha pogut obrir el fitxer: " << nomFitxer << std::endl;
+		return 0;
+	}
+	else if (!fitxer.good())
+	{
+		std::cout << "Fitxer not good" << std::endl;
+		return 0;
+	}
+	return 1;
+
+}
+
+
 
 Board::Board(int width, int height) //Hecho
 {
@@ -350,7 +347,6 @@ bool Board::dump(const std::string& output_path) const
 		fitxer << std::endl;
 	}
 
-
 	return fitxer.good();
 }
 
@@ -426,68 +422,3 @@ bool Board::insideBoard(int x, int y) const
 	}
 	return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

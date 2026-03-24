@@ -4,6 +4,71 @@
 #include "controller.h"
 #include "game.h"
 #include "util.h"
+int test_propio()
+{
+    //Para probar setCell y getCell
+    Candy c(CandyType::TYPE_ORANGE);
+    Board tauler1(10, 10);
+    tauler1.setCell(&c, 0, 0);
+    if (tauler1.getCell(0, 0) != &c)
+    {
+
+        return 1;
+    }
+
+    // para hacer getWidth y getHeight
+    if (tauler1.getWidth() != 10 || tauler1.getHeight() != 10)
+    {
+        return 2;
+    }
+
+    // para shouldExplode
+    Board tauler2(10, 10);
+    Candy vermell(CandyType::TYPE_RED);
+    tauler2.setCell(&vermell, 0, 0);
+    tauler2.setCell(&vermell, 1, 0);
+    tauler2.setCell(&vermell, 2, 0);
+    if (!tauler2.shouldExplode(1, 0))
+    {
+        return 3;
+    }
+    //para explodeAndDrop
+    Board tauler3(10, 10);
+    Candy blau(CandyType::TYPE_BLUE);
+    tauler3.setCell(&blau, 5, 5);
+    tauler3.setCell(&blau, 5, 6);
+    tauler3.setCell(&blau, 5, 7);
+    auto exploded = tauler3.explodeAndDrop();
+    if (exploded.size() != 3)
+    {
+        return 4;
+    }
+
+    // para dump y load
+    Board tauler4(5, 5);
+    Candy green(CandyType::TYPE_GREEN);
+    tauler4.setCell(&green, 0, 0);
+    if (!tauler4.dump(getDataDirPath() + "test.txt"))
+    {
+        return 5;
+    }
+
+    Board tauler5(0, 0);
+    if (!tauler5.load(getDataDirPath() + "test.txt"))
+    {
+        return 6;
+    }
+
+    if (tauler5.getCell(0, 0)->getType() != CandyType::TYPE_GREEN)
+    {
+        return 7;
+    }
+
+    std::filesystem::remove(getDataDirPath() + "test.txt");
+
+
+    return -1;
+}
 
 bool test()
 {
