@@ -17,7 +17,11 @@ const int DEFAULT_BOARD_HEIGHT = 10;
 
 /// Number of candy pieces of the same type needed to explode a horizontal, vertical or diagonal line
 const int SHORTEST_EXPLOSION_LINE = 3;
-
+struct coords
+{
+    int x;
+    int y;
+};
 /**
  * Square game board state with r/w access to individual cells.
  */
@@ -94,10 +98,11 @@ private:
     int m_width;
     /// Students can add as many protected methods and attributes as needed.
 
-    bool insideBoard(int x, int y);
-    std::vector<coords> Board::returnExplosions();
-    void dropCandies();
+    bool insideBoard(int x, int y) const;
+    std::vector<coords> returnExplosions();
+    void dropCandies(void);
 
 };
+
 
 #endif

@@ -20,24 +20,19 @@ Board::Board(int width, int height) //Hecho
 
 	m_tauler.resize(width, std::vector<Candy*>(height));
 }
-std::to_int
+
 Board::~Board()
 {
-
+	return;
 }
 
 
 Candy* Board::getCell(int x, int y) const
 {
-	if (!insideBoard(x, y))
-	{
-		return nullptr;
-	}
-
 	Candy* cela = m_tauler[x][y];
-	if (cela != nullptr)
-	{
-		return cela;
+	if (cela != nullptr) 
+	{ 
+		return cela; 
 	}
 	return nullptr;
 }
@@ -131,7 +126,7 @@ bool Board::shouldExplode(int x, int y) const
 		int chequeaX = x - var + k;
 		int chequeaY = y + var - k;
 
-		if (self->getType() == m_tauler[chequeaX][chequeaY]->getType() && chequeaX >= 0 && chequeaY >=0 && chequeaX <= m_width && chequeaY <= m_height)
+		if (self->getType() == m_tauler[chequeaX][chequeaY]->getType() && chequeaX >= 0 && chequeaY >= 0 && chequeaX <= m_width && chequeaY <= m_height)
 		{
 			contador++;
 		}
@@ -198,7 +193,7 @@ std::vector<Candy*> Board::explodeAndDrop()
 	}
 	*/
 	bool exploded = true;
-	std::vector<Candy> explodedCandies;
+	std::vector<Candy*> explodedCandies;
 	do
 	{
 		// Es verifica quins han d'explotar i es torna les coordenades en el tauler
@@ -208,34 +203,33 @@ std::vector<Candy*> Board::explodeAndDrop()
 			exploded = false;
 			return explodedCandies;
 		}
-	
-		//Eliminar els que hagin explotat
-		for (int i = 0; i < explosions.size(); i++)
+
+		//Eliminar excplotats
+		for (unsigned int i = 0; i < explosions.size(); i++)
 		{
 			coords coord = explosions[i];
+			explodedCandies.push_back(m_tauler[coord.x][coord.y]);
 			m_tauler[coord.x][coord.y] = nullptr;
 		}
 
+		dropCandies();
 
 
-	} while (exploded)
+
+	} while (exploded);
 
 	return explodedCandies;
 }
 
-struct coords
-{
-	int x;
-	int y;
-};
+
 std::vector<coords> Board::returnExplosions()
 {
 	std::vector<coords> result;
 	for (int x = 0; x < m_width; x++)
 	{
-		for (int y = 0; y < m_heigh; y++)
+		for (int y = 0; y < m_height; y++)
 		{
-			if (shouldExplode(x, y)
+			if (shouldExplode(x, y))
 			{
 				coords position;
 				position.x = x;
@@ -247,17 +241,6 @@ std::vector<coords> Board::returnExplosions()
 	return result;
 }
 
-
-void Board::dropCandies()
-{
-	for (int x = 0; x < m_width; x++)
-	{
-		for (int y = m_height; y < m_height; y++)
-		{
-			
-		}
-	}
-}
 
 bool Board::dump(const std::string& output_path) const
 {
@@ -271,7 +254,32 @@ bool Board::load(const std::string& input_path)
 	return false;
 }
 
-bool Board::insideBoard(int x, int y)
+void Board::dropCandies(void)
+{
+	// Baixar cada col
+	for (int x = 0; x < m_width; ++x)
+	{
+		int write = m_height - 1;
+		for (int read = m_height - 1; read >= 0; --read)
+		{
+			if (m_tauler[x][read] != nullptr)
+			{
+				if (write != read)
+				{
+					m_tauler[x][write] = m_tauler[x][read];
+					m_tauler[x][read] = nullptr;
+				}
+				--write;
+			}
+		}
+		for (int y = write; y >= 0; --y)
+		{
+			m_tauler[x][y] = nullptr;
+		}
+	}
+}
+
+bool Board::insideBoard(int x, int y) const
 {
 	if (x < m_width && x >= 0 && y < m_height && y >= 0)
 	{
@@ -279,5 +287,4 @@ bool Board::insideBoard(int x, int y)
 	}
 	return false;
 }
-
 
