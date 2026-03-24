@@ -125,9 +125,15 @@ Board::Board(int width, int height) //Hecho
 	m_tauler.resize(width, std::vector<Candy*>(height));
 }
 
-Board::~Board()
-{
-	return;
+Board::~Board() {
+	for (int x = 0; x < m_width; x++) {
+		for (int y = 0; y < m_height; y++) {
+			if (m_tauler[x][y] != nullptr) {
+				delete m_tauler[x][y];
+				m_tauler[x][y] = nullptr;
+			}
+		}
+	}
 }
 
 
@@ -400,7 +406,7 @@ bool Board::load(const std::string& input_path)
 
 	arxiu >> m_width >> m_height;
 	//std::cout << m_width << " " << m_height << std::endl;
-
+	m_tauler.assign(m_width, std::vector<Candy*>(m_height, nullptr));
 	for (int x = 0; x < m_width; x++)
 	{
 		for (int y = 0; y < m_height; y++)
