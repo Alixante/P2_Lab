@@ -15,14 +15,13 @@ int main(int argc, const char* argv[])
     {
         std::cout << "Test superados." << std::endl;
     }
-    int resultat_test = test_propio();
-    if (resultat_test != -1)
+    if (!testPropio())
     {
-        cout << "Error en test " << resultat_test << std::endl;
+        std::cout << "Error en test custom" << std::endl;
     }
     else
     {
-        cout << "Se han pasado todos los test nuestros custom" << std::endl;
+        std::cout << "Se han pasado todos los test nuestros custom" << std::endl;
     }
 
     // The following code runs the graphic part
