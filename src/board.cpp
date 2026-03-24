@@ -2,6 +2,110 @@
 #include <memory>
 #include <iostream>
 #include <random>
+#include <fstream>
+
+
+char candyTypeToChar(CandyType c)
+{
+	char result;
+	switch (c)
+	{
+	case(CandyType::TYPE_RED):
+		result = 'R';
+		break;
+	case(CandyType::TYPE_BLUE):
+		result = 'B';
+		break;
+	case(CandyType::TYPE_GREEN):
+		result = 'G';
+		break;
+	case(CandyType::TYPE_ORANGE):
+		result = 'O';
+		break;
+	case(CandyType::TYPE_PURPLE):
+		result = 'P';
+		break;
+	case(CandyType::TYPE_YELLOW):
+		result = 'Y';
+		break;
+	default:
+		result = 'X';
+		break;
+	}
+	return result;
+}
+
+bool checkFile(std::ifstream& fitxer, std::string nomFitxer)
+{
+	if (!fitxer.is_open())
+	{
+		std::cout << "No s'ha pogut obrir el fitxer: " << nomFitxer << std::endl;
+		return 0;
+	}
+	//He bscat com fer-ho i sembla ser que es el millor, primer mira el primer caracter del arxiu i si es el EOF, ho diu
+	else if (fitxer.peek() == EOF)
+	{
+		std::cout << "El fitxer està buit: " << nomFitxer << std::endl;
+		return 0;
+	}
+
+	else if (!fitxer.good())
+	{
+		std::cout << "Fitxer not good" << std::endl;
+		return 0;
+	}
+	return 1;
+}
+bool checkFile(std::ofstream& fitxer, std::string nomFitxer)
+{
+	if (!fitxer.is_open())
+	{
+		std::cout << "No s'ha pogut obrir el fitxer: " << nomFitxer << std::endl;
+		return 0;
+	}
+	else if (fitxer.eof())
+	{
+		std::cout << "El fitxer està buit: " << nomFitxer << std::endl;
+		return 0;
+	}
+	else if (!fitxer.good())
+	{
+		std::cout << "Fitxer not good" << std::endl;
+		return 0;
+	}
+	return 1;
+
+}
+
+CandyType charToCandYType(char c)
+{
+	CandyType result;
+	switch (c)
+	{
+	case('R'):
+		result = CandyType::TYPE_RED;
+		break;
+	case('B'):
+		result = CandyType::TYPE_BLUE;
+		break;
+	case('G'):
+		result = CandyType::TYPE_GREEN;
+		break;
+	case('O'):
+		result = CandyType::TYPE_ORANGE;
+		break;
+	case('P'):
+		result = CandyType::TYPE_PURPLE;
+		break;
+	case('Y'):
+		result = CandyType::TYPE_YELLOW;
+		break;
+	default:
+		result = CandyType::TYPE_YELLOW;
+		break;
+	}
+	return result;
+}
 
 Board::Board(int width, int height) //Hecho
 {
@@ -245,13 +349,74 @@ std::vector<coords> Board::returnExplosions()
 bool Board::dump(const std::string& output_path) const
 {
 	// Implement your code here
-	return false;
+	std::ofstream fitxer(output_path);
+	if (!checkFile(fitxer, "dump"))
+	{
+		return false;
+	}
+	fitxer << m_width << ' ' << m_height << std::endl;
+	for (int x = 0; x < m_width; x++)
+	{
+		for (int y = 0; y < m_height; y++)
+		{
+			Candy* c = m_tauler[x][y];
+			if (c != nullptr)
+			{
+				char typeChar = candyTypeToChar(c->getType());
+				fitxer << typeChar;
+			}
+			else
+			{
+				fitxer << 'N';
+			}
+		}
+		fitxer << std::endl;
+	}
+
+
+	return fitxer.good();
 }
 
 bool Board::load(const std::string& input_path)
 {
-	// Implement your code here
-	return false;
+	std::ifstream arxiu(input_path);
+	if (!checkFile(arxiu, "load"))
+	{
+		return false;
+	}
+
+	for (int i = 0; i < m_width; i++)
+	{
+		for (int j = 0; j < m_height; j++)
+		{
+			m_tauler[i][j] = nullptr;
+
+		}
+	}
+
+	arxiu >> m_width >> m_height;
+	std::cout << m_width << " " << m_height << std::endl;
+
+	for (int x = 0; x < m_width; x++)
+	{
+		for (int y = 0; y < m_height; y++)
+		{
+			char candyChar;
+			arxiu >> candyChar;
+			CandyType result;
+			if (candyChar != 'N')
+			{
+				CandyType candyType = charToCandYType(candyChar);
+				Candy c(candyType);
+				m_tauler[x][y] = &c;
+				
+			}
+			std::cout << candyChar;
+			
+		}
+		std::cout << std::endl;
+	}
+	return true;
 }
 
 void Board::dropCandies(void)
@@ -287,4 +452,5 @@ bool Board::insideBoard(int x, int y) const
 	}
 	return false;
 }
+
 

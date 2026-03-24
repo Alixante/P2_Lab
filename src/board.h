@@ -8,7 +8,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-
+#include <fstream>
 #include "candy.h"
 
 /// Default board dimensions
@@ -101,6 +101,7 @@ private:
     bool insideBoard(int x, int y) const;
     std::vector<coords> returnExplosions();
     void dropCandies(void);
+
 
 };
 
