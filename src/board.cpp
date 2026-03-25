@@ -73,7 +73,7 @@ bool checkFile(std::ifstream& fitxer, std::string nomFitxer)
 		return 0;
 	}
 	//He bscat com fer-ho i sembla ser que es el millor, primer mira el primer caracter del arxiu i si es el EOF, ho diu
-	else if (fitxer.peek() == EOF)
+	else if (fitxer.peek() == EOF) //Aprendido 3: Peek mira lo primero del archivo, al igualarlo con EOF mira si no hay nada en el archivo
 	{
 		std::cout << "El fitxer esta buit: " << nomFitxer << std::endl;
 		return 0;
@@ -119,7 +119,7 @@ Board::Board(int width, int height) //Hecho
 	m_width = width;
 	m_height = height;
 
-	m_tauler.resize(width, std::vector<Candy*>(height, nullptr));
+	m_tauler.resize(width, std::vector<Candy*>(height, nullptr)); //Resize, modifica tamaño de array y con un segundo parametro hace otra array vertical height
 }
 
 Board::~Board() {
@@ -187,7 +187,7 @@ bool Board::shouldExplode(int x, int y) const
 		return false;
 	}
 
-	// Horizontal
+	// Horizontal, Aprendido 1: he aprendido a sacar metodos a partir de puntero, self->getType()
 	for (int i = 0; i < 5; i++)
 	{
 		int chequea = x - var + i;
@@ -292,8 +292,8 @@ std::vector<Candy*> Board::explodeAndDrop()
 		for (unsigned int i = 0; i < explosions.size(); i++)
 		{
 			coords coord = explosions[i];
-			explodedCandies.push_back(m_tauler[coord.x][coord.y]);
-			m_tauler[coord.x][coord.y] = nullptr;
+			explodedCandies.push_back(m_tauler[coord.x][coord.y]); //Pones las coordenadas para devolver las chuches explotar
+			m_tauler[coord.x][coord.y] = nullptr; //Nullptr en vez de delete estructura estática
 		}
 
 		dropCandies();
@@ -315,7 +315,7 @@ std::vector<coords> Board::returnExplosions()
 				coords position;
 				position.x = x;
 				position.y = y;
-				result.push_back(position);
+				result.push_back(position); //Aprendido 2: Lo pone al final de la array
 			}
 		}
 	}
@@ -371,7 +371,7 @@ bool Board::load(const std::string& input_path)
 
 	m_width = newWidth;
 	m_height = newHeight;
-	m_tauler.assign(m_width, std::vector<Candy*>(m_height, nullptr));
+	m_tauler.assign(m_width, std::vector<Candy*>(m_height, nullptr)); //Parecido a resize
 	
 	for (int x = 0; x < m_width; x++)
 	{
