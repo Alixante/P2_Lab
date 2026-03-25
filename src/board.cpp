@@ -136,7 +136,10 @@ Board::~Board() {
 
 Candy* Board::getCell(int x, int y) const
 {
-	if (!insideBoard(x, y)) return nullptr;
+	if (!insideBoard(x, y))
+	{
+		return nullptr;
+	}
 	Candy* cela = m_tauler[x][y];
 	if (cela != nullptr)
 	{
