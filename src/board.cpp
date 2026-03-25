@@ -119,7 +119,7 @@ Board::Board(int width, int height) //Hecho
 	m_width = width;
 	m_height = height;
 
-	m_tauler.resize(width, std::vector<Candy*>(height));
+	m_tauler.resize(width, std::vector<Candy*>(height, nullptr));
 }
 
 Board::~Board() {
