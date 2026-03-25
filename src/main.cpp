@@ -30,7 +30,5 @@ int main(int argc, const char* argv[])
     game.run();
     
 
-    //Loading and dumping tests
-
     return 0;
 }

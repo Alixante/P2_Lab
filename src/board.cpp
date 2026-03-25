@@ -392,6 +392,8 @@ bool Board::load(const std::string& input_path)
 void Board::dropCandies(void)
 {
 	// Baixar cada col
+	//El que fa es que basicament es que va pujant i troba els caramels, que llegeix i intena posar
+	//en la casella write, que esta un mes abaix. Ho fa per files, I quan arriba a l'ultim deixa la resta en nullptr
 	for (int x = 0; x < m_width; ++x)
 	{
 		int write = m_height - 1;
