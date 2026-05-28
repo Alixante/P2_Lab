@@ -16,6 +16,7 @@ Game::~Game()
 void Game::update(const Controller& controller)
 {
     // Implement your code here
+   
 }
 
 void Game::render(GraphicManager& graphics)

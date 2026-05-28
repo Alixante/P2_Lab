@@ -119,18 +119,36 @@ Board::Board(int width, int height) //Hecho
 	m_width = width;
 	m_height = height;
 
-	m_tauler.resize(width, std::vector<Candy*>(height, nullptr)); //Resize, modifica tamaño de array y con un segundo parametro hace otra array vertical height
+	m_tauler = new Candy**[width];
+
+	for (int i = 0; i < width; i++)
+	{
+		m_tauler[i] = new Candy*[height];
+		for (int j = 0; j < height; j++)
+		{
+			m_tauler[i][j] = nullptr;
+		}
+	}
+
+	//m_tauler.resize(width, std::vector<Candy*>(height, nullptr)); //Resize, modifica tamaño de array y con un segundo parametro hace otra array vertical height
 }
 
 Board::~Board() {
+	if (m_tauler == nullptr)
+	{
+		return;
+	}
 	for (int x = 0; x < m_width; x++) {
 		for (int y = 0; y < m_height; y++) {
 			if (m_tauler[x][y] != nullptr) {
-				//delete m_tauler[x][y];
-				m_tauler[x][y] = nullptr;
+				delete m_tauler[x][y];
+				//m_tauler[x][y] = nullptr;
 			}
 		}
+		delete[] m_tauler[x];
 	}
+	delete[] m_tauler;
+	m_tauler = nullptr;
 }
 
 
@@ -154,9 +172,32 @@ void Board::setCell(Candy* candy, int x, int y)
 	{
 		return;
 	}
+	if (m_tauler[x][y] != nullptr)
+	{
+		delete m_tauler[x][y];
+		m_tauler[x][y] = nullptr;
+	}
+	if (candy == nullptr)
+	{
+		m_tauler[x][y] = nullptr;
+		return;
+	}
+	m_tauler[x][y] = new Candy(candy->getType());
 
-	m_tauler[x][y] = candy;
+}
 
+void Board::setCell(Candy candy, int x, int y)
+{
+	if (!insideBoard(x, y))
+	{
+		return;
+	}
+	if (m_tauler[x][y] != nullptr)
+	{
+		delete m_tauler[x][y];
+		m_tauler[x][y] = nullptr;
+	}
+	m_tauler[x][y] = new Candy(candy.getType());
 }
 
 int Board::getWidth() const
@@ -361,6 +402,8 @@ bool Board::load(const std::string& input_path)
 		return false;
 	}
 
+	clearBoard();
+
 	int newWidth, newHeight;
 	arxiu >> newWidth >> newHeight;
 	
@@ -371,8 +414,19 @@ bool Board::load(const std::string& input_path)
 
 	m_width = newWidth;
 	m_height = newHeight;
-	m_tauler.assign(m_width, std::vector<Candy*>(m_height, nullptr)); //Parecido a resize
+	//m_tauler.assign(m_width, std::vector<Candy*>(m_height, nullptr)); //Parecido a resize
+
 	
+
+	for (int i = 0; i < newWidth; i++)
+	{
+		m_tauler[i] = new Candy * [newHeight];
+		for (int j = 0; j < newHeight; ++j)
+		{
+			m_tauler[i][j] = nullptr;
+		}
+	}
+
 	for (int x = 0; x < m_width; x++)
 	{
 		for (int y = 0; y < m_height; y++)
@@ -386,6 +440,10 @@ bool Board::load(const std::string& input_path)
 			{
 				CandyType candyType = charToCandYType(candyChar);
 				m_tauler[x][y] = new Candy(candyType);
+			}
+			else
+			{
+				m_tauler[x][y] = nullptr;
 			}
 		}
 	}
@@ -426,4 +484,25 @@ bool Board::insideBoard(int x, int y) const
 		return true;
 	}
 	return false;
+}
+
+void Board::deleteTauler(void)
+{
+	for (int i = 0; i < m_width; i++)
+	{
+		delete[] m_tauler[i];
+	}
+	delete[] m_tauler;
+}
+
+void Board::clearBoard(void)
+{
+	for (int x = 0; x < m_width; x++) {
+		for (int y = 0; y < m_height; y++) {
+			if (m_tauler[x][y] != nullptr) {
+				delete m_tauler[x][y];
+				m_tauler[x][y] = nullptr;
+			}
+		}
+	}
 }

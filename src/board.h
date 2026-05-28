@@ -84,6 +84,7 @@ public:
      * @param y 0-indexed, top to bottom, y coordinate of the cell.
      */
     void setCell(Candy* candy, int x, int y);
+    void setCell(Candy candy, int x, int y);
 
     /// Get the board width
     int getWidth() const;
@@ -93,7 +94,8 @@ public:
     
 private:
     //Punter a candy per poderr posar nullptr quan no hi hagi cap :)
-    std::vector<std::vector<Candy*>> m_tauler;
+    std::vector<std::vector<Candy*>> m_taulerAntic;
+    Candy*** m_tauler;
     int m_height;
     int m_width;
     /// Students can add as many protected methods and attributes as needed.
@@ -101,7 +103,8 @@ private:
     bool insideBoard(int x, int y) const;
     std::vector<coords> returnExplosions();
     void dropCandies(void);
-
+    void deleteTauler(void);
+    void clearBoard(void);
 
 };
 
