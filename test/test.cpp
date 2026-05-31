@@ -137,10 +137,10 @@ bool testPropio()
 bool test()
 {
     // Test board 2D container
-    Candy* c = new Candy(CandyType::TYPE_ORANGE);
+    Candy c(CandyType::TYPE_ORANGE);
     Board b(10, 10);
-    b.setCell(c, 0, 0);
-    if (b.getCell(0, 0) != c)
+    b.setCell(&c, 0, 0);
+    if (b.getCell(0, 0) != &c)
     {
         return false;
     }
@@ -156,7 +156,7 @@ bool test()
         {
             return false;
         }
-        if (b2.getCell(0, 0)->getType() != c->getType())
+        if (b2.getCell(0, 0)->getType() != c.getType())
         {
             return false;
         }
