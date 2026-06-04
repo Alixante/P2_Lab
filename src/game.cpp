@@ -5,6 +5,7 @@
 #include "candy.h"
 #include "board.h"
 #include "candyblock.h"
+#include <filesystem>
 
 Game::Game()
 {
@@ -25,8 +26,7 @@ void Game::update(const Controller& controller)
     static int cursorY = 0;
     static int result = 0;
 
-    static string filePath = " data/save.txt";
-
+    static string filePath = "data/save.txt";
 
     static bool endDrop = false;
 
@@ -282,6 +282,9 @@ void Game::run()
 
 bool Game::dump(const std::string& output_path) const
 {
+    //No sabiem com guardarho a data, no anava, aixi que el creem
+    std::filesystem::create_directories("data");
+
     std::ofstream fitxer(output_path);
 
     if (!fitxer.is_open())
