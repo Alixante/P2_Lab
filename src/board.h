@@ -91,6 +91,12 @@ public:
 
     /// Get the board height
     int getHeight() const;
+
+    //se usar en Game
+    bool insideBoard(int x, int y) const;
+
+    friend std::istream& operator>>(std::istream& is, Board& board);
+    
     
 private:
     //Punter a candy per poderr posar nullptr quan no hi hagi cap :)
@@ -100,13 +106,15 @@ private:
     int m_width;
     /// Students can add as many protected methods and attributes as needed.
 
-    bool insideBoard(int x, int y) const;
+    
     std::vector<coords> returnExplosions();
     void dropCandies(void);
     void deleteTauler(void);
     void clearBoard(void);
 
 };
+
+std::ostream& operator<<(std::ostream& os, const Board& board);
 
 
 #endif

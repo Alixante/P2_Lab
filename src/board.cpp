@@ -154,6 +154,7 @@ Board::~Board() {
 
 Candy* Board::getCell(int x, int y) const
 {
+	
 	if (!insideBoard(x, y))
 	{
 		return nullptr;
@@ -170,6 +171,7 @@ void Board::setCell(Candy* candy, int x, int y)
 {
 	if (!insideBoard(x, y))
 	{
+		std::cout << "Out of bound set: " << "(" << x << ", " << y << ")" << std::endl;
 		return;
 	}
 	if (m_tauler[x][y] != nullptr)
@@ -505,4 +507,88 @@ void Board::clearBoard(void)
 			}
 		}
 	}
+}
+
+std::ostream& operator<<(std::ostream& os, const Board& board)
+{
+
+	os << board.getWidth() << ' ' << board.getHeight() << std::endl;
+	for (int x = 0; x < board.getWidth(); x++)
+	{
+		for (int y = 0; y < board.getHeight(); y++)
+		{
+			Candy* c = board.getCell(x,y);
+			if (c != nullptr)
+			{
+				char typeChar = candyTypeToChar(c->getType());
+				os << typeChar;
+			}
+			else
+			{
+				os << 'N';
+			}
+		}
+		os << std::endl;
+	}
+	return os;
+}
+
+std::istream& operator>>(std::istream& is, Board& board)
+{
+    int newWidth, newHeight;
+    if (!(is >> newWidth >> newHeight))
+    {
+        return is;
+    }
+
+    if (newWidth <= 0 || newHeight <= 0)
+    {
+        return is;
+    }
+    if (board.m_tauler != nullptr)
+    {
+        for (int x = 0; x < board.m_width; ++x)
+        {
+            delete[] board.m_tauler[x];
+        }
+        delete[] board.m_tauler;
+        board.m_tauler = nullptr;
+    }
+
+    board.m_width = newWidth;
+    board.m_height = newHeight;
+    board.m_tauler = new Candy**[board.m_width];
+    for (int x = 0; x < board.m_width; ++x)
+    {
+        board.m_tauler[x] = new Candy*[board.m_height];
+        for (int y = 0; y < board.m_height; ++y)
+        {
+            board.m_tauler[x][y] = nullptr;
+        }
+    }
+
+	//No utilitzem el loop de while, ens ha donat problemes
+    for (int x = 0; x < board.m_width; ++x)
+    {
+        for (int y = 0; y < board.m_height; ++y)
+        {
+            char candyChar;
+            if (!(is >> candyChar))
+            {
+                return is;
+            }
+
+            if (candyChar != 'N')
+            {
+                CandyType candyType = charToCandYType(candyChar);
+                board.m_tauler[x][y] = new Candy(candyType);
+            }
+            else
+            {
+                board.m_tauler[x][y] = nullptr;
+            }
+        }
+    }
+
+    return is;
 }
